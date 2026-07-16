@@ -1,24 +1,44 @@
-class LoginHandler
+using System;
+
+class LoginManager
 {
-    Admin admin = new Admin();
-    Cashier cashie = new Cashier();
-    public LoginHandler()
+    private Admin admin = new Admin();
+    private Cashier cashier = new Cashier();
+
+    public LoginManager()
     {
-        // admin-----
+        // Default Admin Account
         admin.UserId = 1;
-        admin.FullName = "Muhammad Hassan";
+        admin.FullName = "System Administrator";
         admin.UserName = "admin";
         admin.Password = "admin123";
         admin.Role = "Admin";
-        // Cashier------
-        cashie.UserId = 2;
-        cashie.FullName = "cashier";
-        cashie.UserName = "cashier";
-        cashie.Password = "cashier123";
-        cashie.Role = "Cashier";
+
+        // Default Cashier Account
+        cashier.UserId = 2;
+        cashier.FullName = "Default Cashier";
+        cashier.UserName = "cashier";
+        cashier.Password = "cashier123";
+        cashier.Role = "Cashier";
     }
 
+    public User Login(string username, string password)
+    {
+        if (username == admin.UserName && password == admin.Password)
+        {
+            Console.WriteLine("\nLogin Successful!");
+            Console.WriteLine("Welcome Admin.\n");
+            return admin;
+        }
 
+        if (username == cashier.UserName && password == cashier.Password)
+        {
+            Console.WriteLine("\nLogin Successful!");
+            Console.WriteLine("Welcome Cashier.\n");
+            return cashier;
+        }
 
-
+        Console.WriteLine("\nInvalid Username or Password.\n");
+        return null;
+    }
 }

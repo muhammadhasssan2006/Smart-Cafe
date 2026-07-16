@@ -3,11 +3,11 @@ using System;
 class User
 {
     //Attributes--
-    private int userId;
-    private string username;
-    private string password;
-    private string fullName;
-    private string role;
+    private int userId = 0;
+    private string username = "";
+    private string password = "";
+    private string fullName = "";
+    private string role = "";
 
     // Getting and setting values
     public int UserId
