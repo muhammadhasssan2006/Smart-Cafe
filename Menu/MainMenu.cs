@@ -2,8 +2,14 @@ using System;
 
 class MainMenu
 {
-    LoginManager loginManager = new LoginManager();
+    private LoginManager loginManager = new LoginManager();
     private MenuManager menuManager = new MenuManager();
+    private OrderManager orderManager;
+
+    public MainMenu()
+    {
+        orderManager = new OrderManager(menuManager);
+    }
 
     public void ShowMainMenu()
     {
@@ -42,7 +48,7 @@ class MainMenu
                         }
                         else if (loggedInUser.Role == "Cashier")
                         {
-                            CashierMenu cashierMenu = new CashierMenu();
+                            CashierMenu cashierMenu = new CashierMenu(orderManager);
                             cashierMenu.ShowMenu();
                         }
                     }
