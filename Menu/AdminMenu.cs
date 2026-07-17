@@ -2,7 +2,12 @@ using System;
 
 class AdminMenu
 {
-    private MenuManager menuManager = new MenuManager();
+    private MenuManager menuManager;
+
+    public AdminMenu(MenuManager menuManager)
+    {
+        this.menuManager = menuManager;
+    }
 
     public void ShowMenu()
     {

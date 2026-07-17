@@ -4,6 +4,10 @@ using System.Collections.Generic;
 class MenuManager
 {
     private List<MenuItem> menuItems = new List<MenuItem>();
+    public List<MenuItem> MenuItems
+    {
+        get { return menuItems; }
+    }
 
     // Add New Menu Item
     public void AddMenuItem()

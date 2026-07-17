@@ -3,6 +3,7 @@ using System;
 class MainMenu
 {
     LoginManager loginManager = new LoginManager();
+    private MenuManager menuManager = new MenuManager();
 
     public void ShowMainMenu()
     {
@@ -36,7 +37,7 @@ class MainMenu
                     {
                         if (loggedInUser.Role == "Admin")
                         {
-                            AdminMenu adminMenu = new AdminMenu();
+                            AdminMenu adminMenu = new AdminMenu(menuManager);
                             adminMenu.ShowMenu();
                         }
                         else if (loggedInUser.Role == "Cashier")
