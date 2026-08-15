@@ -49,5 +49,30 @@ class BillingManager
 
         GenerateBill(order);
     }
+    public Bill CreateBill(Order order)
+    {
+        Console.Clear();
+
+        Console.WriteLine("========== GENERATE BILL ==========");
+
+        Console.Write("Enter Bill ID: ");
+        int billId = Convert.ToInt32(Console.ReadLine());
+
+        Console.Write("Enter Tax Amount: ");
+        double tax = Convert.ToDouble(Console.ReadLine());
+
+        Console.Write("Enter Discount Amount: ");
+        double discount = Convert.ToDouble(Console.ReadLine());
+
+        Bill bill = new Bill(billId, order, tax, discount);
+
+        Console.WriteLine("\nBill Created Successfully!");
+
+        bill.DisplayBill();
+
+        Console.ReadKey();
+
+        return bill;
+    }
 }
 
