@@ -160,6 +160,7 @@ class OrderManager
 
         bool found = false;
 
+
         foreach (Order order in orders)
         {
             if (order.OrderId == cancelId)
@@ -178,5 +179,19 @@ class OrderManager
         }
 
         Console.ReadKey();
+    }
+
+    // Access existing order
+    public Order GetOrderById(int orderId)
+    {
+        foreach (Order order in orders)
+        {
+            if (order.OrderId == orderId)
+            {
+                return order;
+            }
+        }
+
+        return null;
     }
 }

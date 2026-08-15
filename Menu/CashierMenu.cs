@@ -3,6 +3,8 @@ using System;
 class CashierMenu
 {
     private OrderManager orderManager;
+    private BillingManager billingManager = new BillingManager();
+
 
     public CashierMenu(OrderManager orderManager)
     {
@@ -23,8 +25,8 @@ class CashierMenu
             Console.WriteLine("3. View Orders");
             Console.WriteLine("4. Search Order");
             Console.WriteLine("5. Cancel Order");
-            Console.WriteLine("6. Logout");
-
+            Console.WriteLine("6. Generate Bill");
+            Console.WriteLine("7. Logout");
             Console.Write("\nSelect Option: ");
             int choice = Convert.ToInt32(Console.ReadLine());
 
@@ -51,6 +53,9 @@ class CashierMenu
                     break;
 
                 case 6:
+                    billingManager.GenerateBillByOrderId(orderManager);
+                    break;
+                case 7:
                     Console.WriteLine("\nLogging Out...");
                     Console.ReadKey();
                     return;
