@@ -4,14 +4,22 @@ using System.Collections.Generic;
 class OrderManager
 {
     private List<Order> orders = new List<Order>();
+
+    // Gives reports access to existing orders
+    public List<Order> Orders
+    {
+        get { return orders; }
+    }
+
     private MenuManager menuManager;
 
+    // Get the existing menu manager
     public OrderManager(MenuManager menuManager)
     {
         this.menuManager = menuManager;
     }
 
-    // Create New Order
+    // Create a new order
     public void CreateOrder()
     {
         Console.Clear();
@@ -22,10 +30,10 @@ class OrderManager
         int orderId = Convert.ToInt32(Console.ReadLine());
 
         Console.Write("Enter Customer Name: ");
-        string customerName = Console.ReadLine();
+        string customerName = Console.ReadLine() ?? "";
 
         Console.Write("Order Type (Dine In / Take Away): ");
-        string orderType = Console.ReadLine();
+        string orderType = Console.ReadLine() ?? "";
 
         Order order = new Order(orderId, customerName, orderType);
 
@@ -35,7 +43,7 @@ class OrderManager
         Console.ReadKey();
     }
 
-    // Add Item To Order
+    // Add a menu item to an existing order
     public void AddItemToOrder()
     {
         Console.Clear();
@@ -43,7 +51,7 @@ class OrderManager
         Console.Write("Enter Order ID: ");
         int orderId = Convert.ToInt32(Console.ReadLine());
 
-        Order selectedOrder = null;
+        Order? selectedOrder = null;
 
         foreach (Order order in orders)
         {
@@ -71,7 +79,7 @@ class OrderManager
         Console.Write("\nEnter Menu Item ID: ");
         int itemId = Convert.ToInt32(Console.ReadLine());
 
-        MenuItem selectedItem = null;
+        MenuItem? selectedItem = null;
 
         foreach (MenuItem item in menuManager.MenuItems)
         {
@@ -100,8 +108,7 @@ class OrderManager
         Console.ReadKey();
     }
 
-
-    // View All Orders
+    // View all existing orders
     public void ViewOrders()
     {
         Console.Clear();
@@ -121,7 +128,7 @@ class OrderManager
         Console.ReadKey();
     }
 
-    // Search Order
+    // Search an order using its ID
     public void SearchOrder()
     {
         Console.Clear();
@@ -149,8 +156,7 @@ class OrderManager
         Console.ReadKey();
     }
 
-
-    // Cancel Order
+    // Cancel an existing order
     public void CancelOrder()
     {
         Console.Clear();
@@ -159,7 +165,6 @@ class OrderManager
         int cancelId = Convert.ToInt32(Console.ReadLine());
 
         bool found = false;
-
 
         foreach (Order order in orders)
         {
@@ -181,8 +186,8 @@ class OrderManager
         Console.ReadKey();
     }
 
-    // Access existing order
-    public Order GetOrderById(int orderId)
+    // Find an existing order by its ID
+    public Order? GetOrderById(int orderId)
     {
         foreach (Order order in orders)
         {
@@ -193,5 +198,100 @@ class OrderManager
         }
 
         return null;
+    }
+
+    // Create an order directly from the customer menu
+    public void CreateCustomerOrder()
+    {
+        Console.Clear();
+
+        Console.WriteLine("========== PLACE ORDER ==========");
+
+        Console.Write("Enter Order ID: ");
+        int orderId = Convert.ToInt32(Console.ReadLine());
+
+        Console.Write("Enter Customer Name: ");
+        string customerName = Console.ReadLine() ?? "";
+
+        Console.Write("Order Type (Dine In / Take Away): ");
+        string orderType = Console.ReadLine() ?? "";
+
+        Order order = new Order(orderId, customerName, orderType);
+
+        orders.Add(order);
+
+        Console.WriteLine("\nOrder Created Successfully!");
+        Console.WriteLine("Now you can add items to your order.");
+
+        Console.ReadKey();
+
+        // Add menu items to the newly created order
+        AddItemsForCustomer(order);
+    }
+
+    // Add menu items selected by the customer
+    private void AddItemsForCustomer(Order selectedOrder)
+    {
+        while (true)
+        {
+            Console.Clear();
+
+            Console.WriteLine("========== SELECT ITEMS ==========");
+
+            foreach (MenuItem item in menuManager.MenuItems)
+            {
+                if (item.IsAvailable)
+                {
+                    item.DisplayMenuItem();
+                }
+            }
+
+            Console.WriteLine("\n0. Finish Order");
+
+            Console.Write("\nEnter Menu Item ID: ");
+            int itemId = Convert.ToInt32(Console.ReadLine());
+
+            if (itemId == 0)
+            {
+                break;
+            }
+
+            MenuItem? selectedItem = null;
+
+            foreach (MenuItem item in menuManager.MenuItems)
+            {
+                if (item.ItemId == itemId && item.IsAvailable)
+                {
+                    selectedItem = item;
+                    break;
+                }
+            }
+
+            if (selectedItem == null)
+            {
+                Console.WriteLine("\nItem Not Found or Not Available.");
+                Console.ReadKey();
+                continue;
+            }
+
+            Console.Write("Enter Quantity: ");
+            int quantity = Convert.ToInt32(Console.ReadLine());
+
+            OrderItem orderItem = new OrderItem(selectedItem, quantity);
+
+            selectedOrder.AddItem(orderItem);
+
+            Console.WriteLine("\nItem Added Successfully!");
+            Console.ReadKey();
+        }
+
+        Console.Clear();
+
+        Console.WriteLine("========== ORDER PLACED ==========");
+
+        selectedOrder.DisplayOrder();
+
+        Console.WriteLine("\nYour order has been placed successfully!");
+        Console.ReadKey();
     }
 }

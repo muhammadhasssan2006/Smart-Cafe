@@ -6,9 +6,18 @@ class MainMenu
     private MenuManager menuManager = new MenuManager();
     private OrderManager orderManager;
 
+    private PaymentManager paymentManager = new PaymentManager();
+    private ReportManager reportManager;
+
     public MainMenu()
     {
+        // Use the same managers throughout the project
         orderManager = new OrderManager(menuManager);
+
+        reportManager = new ReportManager(
+            orderManager.Orders,
+            paymentManager.Payments
+        );
     }
 
     public void ShowMainMenu()
@@ -21,7 +30,8 @@ class MainMenu
             Console.WriteLine("   SMART CAFE MANAGEMENT SYSTEM");
             Console.WriteLine("======================================");
             Console.WriteLine("1. Login");
-            Console.WriteLine("2. Exit");
+            Console.WriteLine("2. Customer Menu");
+            Console.WriteLine("3. Exit");
             Console.WriteLine("======================================");
 
             Console.Write("Enter Your Choice: ");
@@ -29,13 +39,14 @@ class MainMenu
 
             switch (choice)
             {
+                // Login for Admin and Cashier
                 case 1:
 
                     Console.Write("\nEnter Username: ");
-                    string username = Console.ReadLine();
+                    string username = Console.ReadLine() ?? "";
 
                     Console.Write("Enter Password: ");
-                    string password = Console.ReadLine();
+                    string password = Console.ReadLine() ?? "";
 
                     User loggedInUser = loginManager.Login(username, password);
 
@@ -43,12 +54,18 @@ class MainMenu
                     {
                         if (loggedInUser.Role == "Admin")
                         {
-                            AdminMenu adminMenu = new AdminMenu(menuManager);
+                            // Admin gets menu management and reports
+                            AdminMenu adminMenu =
+                                new AdminMenu(menuManager, reportManager);
+
                             adminMenu.ShowMenu();
                         }
                         else if (loggedInUser.Role == "Cashier")
                         {
-                            CashierMenu cashierMenu = new CashierMenu(orderManager);
+                            // Cashier handles existing orders
+                            CashierMenu cashierMenu =
+                                new CashierMenu(orderManager);
+
                             cashierMenu.ShowMenu();
                         }
                     }
@@ -57,11 +74,23 @@ class MainMenu
                     Console.ReadKey();
                     break;
 
+                // Customer can browse menu and place orders
                 case 2:
+
+                    CustomerMenu customerMenu =
+                        new CustomerMenu(menuManager, orderManager);
+
+                    customerMenu.ShowMenu();
+                    break;
+
+                // Exit the application
+                case 3:
+
                     Console.WriteLine("\nThank You For Using Smart Cafe.");
                     return;
 
                 default:
+
                     Console.WriteLine("\nInvalid Choice!");
                     Console.ReadKey();
                     break;

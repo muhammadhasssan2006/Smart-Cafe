@@ -4,6 +4,11 @@ using System.Collections.Generic;
 class PaymentManager
 {
     private List<Payment> payments = new List<Payment>();
+    // Gives reports access to existing payments
+    public List<Payment> Payments
+    {
+        get { return payments; }
+    }
 
     // Take Payment
     public void TakePayment(Bill bill)
