@@ -22,79 +22,90 @@ class MainMenu
 
     public void ShowMainMenu()
     {
-        while (true)
+        // Exception handling
+        try
         {
-            Console.Clear();
-
-            Console.WriteLine("======================================");
-            Console.WriteLine("   SMART CAFE MANAGEMENT SYSTEM");
-            Console.WriteLine("======================================");
-            Console.WriteLine("1. Login");
-            Console.WriteLine("2. Customer Menu");
-            Console.WriteLine("3. Exit");
-            Console.WriteLine("======================================");
-
-            Console.Write("Enter Your Choice: ");
-            int choice = Convert.ToInt32(Console.ReadLine());
-
-            switch (choice)
+            while (true)
             {
-                // Login for Admin and Cashier
-                case 1:
+                Console.Clear();
 
-                    Console.Write("\nEnter Username: ");
-                    string username = Console.ReadLine() ?? "";
+                Console.WriteLine("======================================");
+                Console.WriteLine("   SMART CAFE MANAGEMENT SYSTEM");
+                Console.WriteLine("======================================");
+                Console.WriteLine("1. Login");
+                Console.WriteLine("2. Customer Menu");
+                Console.WriteLine("3. Exit");
+                Console.WriteLine("======================================");
 
-                    Console.Write("Enter Password: ");
-                    string password = Console.ReadLine() ?? "";
+                Console.Write("Enter Your Choice: ");
+                int choice = Convert.ToInt32(Console.ReadLine());
 
-                    User loggedInUser = loginManager.Login(username, password);
+                switch (choice)
+                {
+                    // Login for Admin and Cashier
+                    case 1:
 
-                    if (loggedInUser != null)
-                    {
-                        if (loggedInUser.Role == "Admin")
+                        Console.Write("\nEnter Username: ");
+                        string username = Console.ReadLine() ?? "";
+
+                        Console.Write("Enter Password: ");
+                        string password = Console.ReadLine() ?? "";
+
+                        User loggedInUser = loginManager.Login(username, password);
+
+                        if (loggedInUser != null)
                         {
-                            // Admin gets menu management and reports
-                            AdminMenu adminMenu =
-                                new AdminMenu(menuManager, reportManager);
+                            if (loggedInUser.Role == "Admin")
+                            {
+                                // Admin gets menu management and reports
+                                AdminMenu adminMenu =
+                                    new AdminMenu(menuManager, reportManager);
 
-                            adminMenu.ShowMenu();
+                                adminMenu.ShowMenu();
+                            }
+                            else if (loggedInUser.Role == "Cashier")
+                            {
+                                // Cashier handles existing orders
+                                CashierMenu cashierMenu =
+                                    new CashierMenu(orderManager);
+
+                                cashierMenu.ShowMenu();
+                            }
                         }
-                        else if (loggedInUser.Role == "Cashier")
-                        {
-                            // Cashier handles existing orders
-                            CashierMenu cashierMenu =
-                                new CashierMenu(orderManager);
 
-                            cashierMenu.ShowMenu();
-                        }
-                    }
+                        Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+                        break;
 
-                    Console.WriteLine("\nPress any key to continue...");
-                    Console.ReadKey();
-                    break;
+                    // Customer can browse menu and place orders
+                    case 2:
 
-                // Customer can browse menu and place orders
-                case 2:
+                        CustomerMenu customerMenu =
+                            new CustomerMenu(menuManager, orderManager);
 
-                    CustomerMenu customerMenu =
-                        new CustomerMenu(menuManager, orderManager);
+                        customerMenu.ShowMenu();
+                        break;
 
-                    customerMenu.ShowMenu();
-                    break;
+                    // Exit the application
+                    case 3:
 
-                // Exit the application
-                case 3:
+                        Console.WriteLine("\nThank You For Using Smart Cafe.");
+                        return;
 
-                    Console.WriteLine("\nThank You For Using Smart Cafe.");
-                    return;
+                    default:
 
-                default:
-
-                    Console.WriteLine("\nInvalid Choice!");
-                    Console.ReadKey();
-                    break;
+                        Console.WriteLine("\nInvalid Choice!");
+                        Console.ReadKey();
+                        break;
+                }
             }
+
+
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Enter numbers only....");
+
         }
     }
 }
